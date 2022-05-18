@@ -9,6 +9,7 @@
 import UIKit
 import WebKit
 
+//set your webview URL
 let sampleURL = URL(string: "https://devmobile.sccdev-qa.com/checkoutNext/")!
 let requestURL = URLRequest(url: sampleURL)
 
@@ -23,9 +24,6 @@ class ViewController: UIViewController, WKNavigationDelegate {
     var currentWebView: WKWebView {
         return popupWebViews.isEmpty ? webView : popupWebViews.last!
     }
-    
-    
-    var urlPath: String = "https://devmobile.sccdev-qa.com/checkoutNext/"
     
     open override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,20 +59,18 @@ class ViewController: UIViewController, WKNavigationDelegate {
         currentWebView.reload()
     }
 }
-
+// Create Extension that handle pop up
 extension ViewController: WKUIDelegate {
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         popupWebView = WKWebView(frame: webView.frame, configuration: configuration)
-//        popupWebView!.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        popupWebView!.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         popupWebView!.navigationDelegate = self
         popupWebView!.uiDelegate = self
-//        popupWebView?.translatesAutoresizingMaskIntoConstraints = false
         popupWebView?.allowsBackForwardNavigationGestures = true
         view.addSubview(popupWebView!)
-        //popupWebViews.append(popupWebView!)
         return popupWebView!
     }
-    
+    // remove webview when popUp is closed
     func webViewDidClose(_ webView: WKWebView) {
         webView.removeFromSuperview()
         popupWebView = nil
